@@ -1,4 +1,4 @@
 FROM ubuntu
 
 # Define default command.
-RUN /bin/bash
+RUN /usr/bin/top
