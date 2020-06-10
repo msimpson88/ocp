@@ -1,4 +1,4 @@
 FROM ubuntu
 
 # Define default command.
-CMD ["bash"]
+CMD /bin/bash
