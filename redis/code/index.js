@@ -111,7 +111,8 @@ app.post('/send', async (req, res) => {
 
     sendResponse(queue, message)
         .then((result) => {
-            console.log('Message Sent ID:' + result);
+            console.log('To: ' + queue)
+            console.log('Message Sent ID: ' + result);
             console.log('----------------------------------------------------')
             res.send({
                 status: 'Message Sent',
