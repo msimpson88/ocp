@@ -62,6 +62,22 @@ const sendResponse = (qname, message) => {
     });
 };
 
+const receiveMessage = (qname) => {
+    return new Promise((resolve, reject) => {
+        rsmq.receiveMessage({ qname: qname }, function (err, resp) {
+            if (err) {
+                reject(err)
+            }
+
+            if (resp.id) {
+                resolve(resp)
+            } else {
+                resolve("No messages for me...")
+            }
+        });
+    });
+};
+
 app.get('/', (req, res) => {
     res.send(`
     <h1>Common Control Plane - Redis Test Server</h1> 
@@ -71,13 +87,23 @@ app.get('/', (req, res) => {
     `);
 });
 
+app.get('/messages', (req, res) => {
+    receiveMessage('test-queue')
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) => {
+        res.status(400).send(err);
+    })
+})
+
 app.post('/send', async (req, res) => {
     var queue = req.query.queue;
     var message = JSON.stringify(req.body);
 
-    console.log(message);
     sendResponse(queue, message)
         .then((result) => {
+            console.log(result);
             res.send({
                 status: 'Message Sent',
                 id: result,
