@@ -32,6 +32,22 @@ rsmq.listQueues(function (err, queues) {
     }
     activeQueues = queues;
     console.log(queues);
+
+    if (!queues.includes('test-queue')) {
+        console.log("test-queue doesn't exist, creating it");
+        rsmq.createQueue({ qname: 'test-queue' }, (err, resp) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            if (resp === 1) {
+                console.log('test-queue created');
+            }
+        });
+    } else {
+        console.log('test-queue already exists');
+    }
 });
 
 // send response message func
