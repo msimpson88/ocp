@@ -100,16 +100,27 @@ app.get('/messages', (req, res) => {
 app.post('/send', async (req, res) => {
     var queue = req.query.queue;
     var message = JSON.stringify(req.body);
+    var ts = new Date();
+    console.log('----------------------------------------------------')
+    console.log({
+        time: ts.toLocaleString(),
+        transactionId: req.body.transactionId,
+        service: req.body.service,
+        requestType: req.body.requestType,
+    })
 
     sendResponse(queue, message)
         .then((result) => {
-            console.log(result);
+            console.log('Message Sent ID:' + result);
+            console.log('----------------------------------------------------')
             res.send({
                 status: 'Message Sent',
                 id: result,
             });
         })
         .catch((err) => {
+            console.log(err)
+            console.log('----------------------------------------------------')
             res.status(400).send(err);
         });
 });
